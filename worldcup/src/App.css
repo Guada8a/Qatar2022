@@ -1,0 +1,221 @@
+@font-face {
+  font-family: "Open Sans";
+  src: url("fonts/Qatar2022Arabic-Bold.ttf") format("truetype");
+}
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+  .rombo {
+    animation: rombo infinite 2s linear;
+  }
+}
+
+.App-header {
+  background-color: black;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #a79f9e;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rombo {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body {
+  font-family: "Open Sans" !important;
+}
+table {
+  width: 100%;
+  border: 1px solid white !important;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  font-family: "Open Sans";
+}
+table > thead > tr > th {
+  border: 1px solid white;
+  padding: 5px;
+  font-size: 11px;
+  color: #ebdacd;
+  text-align: center;
+  background-color: #2a2a2a !important;
+  font-weight: bold;
+}
+table > thead > tr > td {
+  background-color: #ebdacd;
+  color: #2a2a2a;
+  font-weight: bold;
+}
+.gol {
+  background-color: #d82f16;
+  color: #ebdacd;
+  font-weight: bold;
+}
+.winner {
+  color: #d82f16;
+}
+.gol-gh {
+  text-align: right;
+  color: #2a2a2a;
+}
+.gol-ga {
+  text-align: left;
+  color: #2a2a2a;
+}
+.gol-img {
+  object-fit: cover;
+}
+.card {
+  width: 100%;
+}
+.card-img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto 1/1;
+}
+.card-img-top,
+.card-img-top1 {
+  margin-top: 7%;
+  width: 80%;
+  height: 80%;
+  border: none;
+  border-radius: 3px;
+  aspect-ratio: auto 1/1;
+  object-fit: cover;
+}
+.nav-link {
+  color: #ebdacd !important;
+}
+.nav-link.active {
+  color: #2a2a2a !important;
+  background-color: #fff !important;
+}
+#menu.nav-link {
+  color: #717171 !important;
+  background-color: #fff !important;
+}
+#menu.nav-link.active {
+  color: #d82f16 !important;
+}
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#grupo {
+  font-size: 15px;
+  writing-mode: vertical-lr;
+  -moz-transform: scale(-1, -1);
+  -webkit-transform: scale(-1, -1);
+  -o-transform: scale(-1, -1);
+  -ms-transform: scale(-1, -1);
+  transform: scale(-1, -1);
+}
+.grupo {
+  color: #d82f16 !important;
+  background-color: #ebdacd !important;
+  font-weight: bold;
+  font-size: 15px;
+}
+.circulo-finalizado {
+  width: 10px;
+  height: 10px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #5cb85c;
+}
+
+.circulo-en-progreso {
+  width: 10px;
+  height: 10px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #f0ad4e;
+}
+
+.circulo-no-iniciado {
+  width: 10px;
+  height: 10px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: gray;
+}
+.containerLoaded {
+  display: flex;
+  width: 100%;
+  height: 200%;
+  justify-content: center;
+}
+.pos1 > #pos,
+.pos2 > #pos {
+  background-color: #5cb85c;
+  color: #ebdacd;
+  font-weight: bold;
+}
+.pos3 > #pos,
+.pos4 > #pos {
+  background-color: #d82f16;
+  color: #ebdacd;
+  font-weight: bold;
+}
+Table.indicacion {
+  margin-bottom: -2px;
+}
+.card-img-suiza {
+  width: 80%;
+  height: 100%;
+  border: none;
+  border-radius: 3px;
+  object-fit: cover;
+}
+.rombo {
+  width: 4%;
+  height: 4%;
+  border: 3px solid #d82f16;
+  background: #d82f16;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.App1-child{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
