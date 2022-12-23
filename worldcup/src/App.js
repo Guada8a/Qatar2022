@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { Table, Nav, Spinner, Card, Row, Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
-import img from './img/Score.jpg';
 import moment from 'moment';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -38,16 +36,28 @@ class App extends React.Component {
           DatailsLoadedGroup: true
         };
       })
+
+    fetch('https://copa22.medeiro.tech/matches/clakj8jim005rra2tzlhh44nw').then(res => res.json()).then(json => {
+      this.tLugar = {
+        tlugar: json,
+        DatailsLoadedTercer: true
+      };
+    }
+    )
   }
   render() {
     var { items, DatailsLoaded } = this.state;
     var { grupos, DatailsLoadedGroup } = this.apiGrupos;
 
+    //Filtrado de Fases
     var faseGrupos = items.filter(item => item.stageName === 'First stage');
     var octavos = items.filter(item => item.stageName === 'Round of 16');
     var cuartos = items.filter(item => item.stageName === 'Quarter-final');
     var semifinal = items.filter(item => item.stageName === 'Semi-final');
+    var tercer = items.filter(item => item.stageName === 'Play-off for third place');
     var final = items.filter(item => item.stageName === 'Final');
+
+
     //Cambio de info -- TRADUCCIONES Y REASIGNACIONES
     faseGrupos.forEach(item => {
       //Grupos
@@ -548,20 +558,175 @@ class App extends React.Component {
       //Finalizado
       if (item.status === 'completed')
         item.status = 'circulo-finalizado';
+
+      //Goles
+      if (item.homeTeam.goals === 0 && item.awayTeam.goals === 0 && item.status === "circulo-no-iniciado") {
+        item.homeTeam.goals = '-';
+        item.awayTeam.goals = '-';
+      }
     });
     cuartos.forEach(item => {
       // eslint-disable-next-line default-case
       switch (item.homeTeam.name) {
         case 'Netherlands':
-          item.homeTeam = 'Países Bajos';
+          item.homeTeam.name = 'Países Bajos';
           item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/NED.png';
           break;
+        case 'England':
+          item.homeTeam.name = 'Inglaterra';
+          item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/ENG.png';
+          break;
+        case 'Croatia':
+          item.homeTeam.name = 'Croacia';
+          item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/CRO.png';
+          break;
+        case 'Morocco':
+          item.homeTeam.name = 'Marruecos';
+          item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/MAR.png';
+          break;
       }
+      // eslint-disable-next-line default-case
       switch (item.awayTeam.name) {
         case 'Argentina':
-          item.awayTeam = 'Argentina';
+          item.awayTeam.name = 'Argentina';
           item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/ARG.png';
           break;
+        case 'France':
+          item.awayTeam.name = 'Francia';
+          item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/FRA.png';
+          break;
+        case 'Brazil':
+          item.awayTeam.name = 'Brasil';
+          item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/BRA.png';
+          break;
+        case 'Portugal':
+          item.awayTeam.name = 'Portugal';
+          item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/POR.png';
+          break;
+      }
+      //Estadios
+      // eslint-disable-next-line default-case
+      switch (item.venue) {
+        case 'Al Bayt Stadium':
+          item.venue = 'Al Bayt';
+          break;
+        case 'Al Janoub Stadium':
+          item.venue = 'Al Janoub';
+          break;
+        case 'Stadium 974':
+          item.venue = 'Estadio 974';
+          break;
+        case 'Ahmad Bin Ali Stadium':
+          item.venue = 'Áhmad Bin Ali';
+          break;
+        case 'Khalifa International Stadium':
+          item.venue = 'Estadio Internacional Jalifa';
+          break;
+        case 'Al Thumama Stadium':
+          item.venue = 'Estadio Al Zumama';
+          break;
+        case 'Lusail Stadium':
+          item.venue = 'Estadio Lusail';
+          break;
+        case 'Education City Stadium':
+          item.venue = 'Ciudad de la Educación';
+          break;
+      }
+      //Fecha y hora formateada
+      item.date = moment(item.date).format('DD-MM-YY HH:mm');
+      //Progreso
+      if (item.status === 'in_progress')
+        item.status = 'circulo-en-progreso';
+      //No iniciado
+      if (item.status === 'scheduled')
+        item.status = 'circulo-no-iniciado';
+      //Finalizado
+      if (item.status === 'completed')
+        item.status = 'circulo-finalizado';
+
+      //Goles
+      if (item.homeTeam.goals === 0 && item.awayTeam.goals === 0 && item.status === "circulo-no-iniciado") {
+        item.homeTeam.goals = '-';
+        item.awayTeam.goals = '-';
+      }
+    });
+    semifinal.forEach(item => {
+      // eslint-disable-next-line default-case
+      switch (item.homeTeam.name) {
+        case 'Argentina':
+          item.homeTeam.name = 'Argentina';
+          item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/ARG.png';
+          break;
+        case 'France':
+          item.homeTeam.name = 'Francia';
+          item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/FRA.png';
+          break;
+      }
+      // eslint-disable-next-line default-case
+      switch (item.awayTeam.name) {
+        case 'Croatia':
+          item.awayTeam.name = 'Croacia';
+          item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/CRO.png';
+          break;
+        case 'Morocco':
+          item.awayTeam.name = 'Marruecos';
+          item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/MAR.png';
+          break;
+      }
+      //Estadios
+      // eslint-disable-next-line default-case
+      switch (item.venue) {
+        case 'Al Bayt Stadium':
+          item.venue = 'Al Bayt';
+          break;
+        case 'Al Janoub Stadium':
+          item.venue = 'Al Janoub';
+          break;
+        case 'Stadium 974':
+          item.venue = 'Estadio 974';
+          break;
+        case 'Ahmad Bin Ali Stadium':
+          item.venue = 'Áhmad Bin Ali';
+          break;
+        case 'Khalifa International Stadium':
+          item.venue = 'Estadio Internacional Jalifa';
+          break;
+        case 'Al Thumama Stadium':
+          item.venue = 'Estadio Al Zumama';
+          break;
+        case 'Lusail Stadium':
+          item.venue = 'Estadio Lusail';
+          break;
+        case 'Education City Stadium':
+          item.venue = 'Ciudad de la Educación';
+          break;
+      }
+      //Fecha y hora formateada
+      item.date = moment(item.date).format('DD-MM-YY HH:mm');
+      //Progreso
+      if (item.status === 'in_progress')
+        item.status = 'circulo-en-progreso';
+      //No iniciado
+      if (item.status === 'scheduled')
+        item.status = 'circulo-no-iniciado';
+      //Finalizado
+      if (item.status === 'completed')
+        item.status = 'circulo-finalizado';
+
+      //Goles
+      if (item.homeTeam.goals === 0 && item.awayTeam.goals === 0 && item.status === "circulo-no-iniciado") {
+        item.homeTeam.goals = '-';
+        item.awayTeam.goals = '-';
+      }
+    });
+    tercer.forEach(item => {
+      if (item.homeTeam.name === 'Croatia') {
+        item.homeTeam.name = 'Croacia';
+        item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/CRO.png';
+      }
+      if (item.awayTeam.name === 'Morocco') {
+        item.awayTeam.name = 'Marruecos';
+        item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/MAR.png';
       }
       //Estadios
       // eslint-disable-next-line default-case
@@ -602,35 +767,92 @@ class App extends React.Component {
       //Finalizado
       if (item.status === 'completed')
         item.status = 'circulo-finalizado';
-      
-      
     });
+    final.forEach(item => {
+      if (item.homeTeam.name === 'Argentina') {
+        item.homeTeam.name = 'Argentina';
+        item.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/ARG.png';
+      }
+      if (item.awayTeam.name === 'France') {
+        item.awayTeam.name = 'Francia';
+        item.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/FRA.png';
+      }
+      //Estadios
+      // eslint-disable-next-line default-case
+      switch (item.venue) {
+        case 'Al Bayt Stadium':
+          item.venue = 'Al Bayt';
+          break;
+        case 'Al Janoub Stadium':
+          item.venue = 'Al Janoub';
+          break;
+        case 'Stadium 974':
+          item.venue = 'Estadio 974';
+          break;
+        case 'Ahmad Bin Ali Stadium':
+          item.venue = 'Áhmad Bin Ali';
+          break;
+        case 'Khalifa International Stadium':
+          item.venue = 'Estadio Internacional Jalifa';
+          break;
+        case 'Al Thumama Stadium':
+          item.venue = 'Estadio Al Zumama';
+          break;
+        case 'Lusail Stadium':
+          item.venue = 'Estadio Lusail';
+          break;
+        case 'Education City Stadium':
+          item.venue = 'Ciudad de la Educación';
+          break;
+      }
+      //Fecha y hora formateada
+      item.date = moment(item.date).format('DD-MM-YY HH:mm');
+      //Progreso
+      if (item.status === 'in progress')
+        item.status = 'circulo-en-progreso';
+      //No iniciado
+      if (item.status === 'scheduled')
+        item.status = 'circulo-no-iniciado';
+      //Finalizado
+      if (item.status === 'completed')
+        item.status = 'circulo-finalizado';
+    });
+    let tercero = tercer[0];
+    let final64 = final[0];
     grupos.forEach((item) => {
       // eslint-disable-next-line default-case
       switch (item.code) {
         case 'A':
           item.code = 'Grupo A';
+          item.number = "1";
           break;
         case 'B':
           item.code = 'Grupo B';
+          item.number = "2";
           break;
         case 'C':
           item.code = 'Grupo C';
+          item.number = "3";
           break;
         case 'D':
           item.code = 'Grupo D';
+          item.number = "4";
           break;
         case 'E':
           item.code = 'Grupo E';
+          item.number = "5";
           break;
         case 'F':
           item.code = 'Grupo F';
+          item.number = "6";
           break;
         case 'G':
           item.code = 'Grupo G';
+          item.number = "7";
           break;
         case 'H':
           item.code = 'Grupo H';
+          item.number = "8";
           break;
       }
       //Nombres
@@ -768,6 +990,121 @@ class App extends React.Component {
         }
       });
     });
+    ///Group A
+    let grupoA = grupos.filter(grupo => grupo.code === 'Grupo A');
+    let partidosA = [];
+    grupoA.forEach(grupo => {
+      grupo.teams.forEach(team => {
+        team.matches.forEach(match => {
+          // eslint-disable-next-line default-case
+          switch (match.homeTeam.name) {
+            case 'Qatar':
+              match.homeTeam.name = 'Catar';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/QAT.png';
+              break;
+            case 'Ecuador':
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/ECU.png';
+              break;
+            case 'Netherlands':
+              match.homeTeam.name = 'Países Bajos';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/NED.png';
+              break;
+            case 'Senegal':
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/SEN.png';
+              break;
+          }
+          // eslint-disable-next-line default-case
+          switch (match.awayTeam.name) {
+            case 'Qatar':
+              match.awayTeam.name = 'Catar';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/QAT.png';
+              break;
+            case 'Ecuador':
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/ECU.png';
+              break;
+            case 'Netherlands':
+              match.awayTeam.name = 'Países Bajos';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/NED.png';
+              break;
+            case 'Senegal':
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/SEN.png';
+              break;
+          }
+          //Fecha y hora formateada
+          match.date = new Date(match.date).toUTCString();
+          partidosA.push(match);
+        })
+      });
+    });
+    var hash = {};
+    partidosA = partidosA.filter(function (current) {
+      var exists = !hash[current.id];
+      hash[current.id] = true;
+      return exists;
+    });
+    partidosA.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
+
+    ///Group B
+    let grupoB = grupos.filter(grupo => grupo.code === 'Grupo B');
+    let partidosB = [];
+    grupoB.forEach(grupo => {
+      grupo.teams.forEach(team => {
+        team.matches.forEach(match => {
+          // eslint-disable-next-line default-case
+          switch (match.homeTeam.name) {
+            case 'England':
+              match.homeTeam.name = 'Inglaterra';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/ENG.png';
+              break;
+            case 'Iran':
+              match.homeTeam.name = 'Irán';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/IRN.png';
+              break;
+            case 'USA':
+              match.homeTeam.name = 'Estados Unidos';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/USA.png';
+              break;
+            case 'Wales':
+              match.homeTeam.name = 'Gales';
+              match.homeTeam.flag = 'https://play.fifa.com/media/flags/squads/WAL.png';
+              break;
+          }
+          // eslint-disable-next-line default-case
+          switch (match.awayTeam.name) {
+            case 'England':
+              match.awayTeam.name = 'Inglaterra';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/ENG.png';
+              break;
+            case 'Iran':
+              match.awayTeam.name = 'Irán';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/IRN.png';
+              break;
+            case 'USA':
+              match.awayTeam.name = 'Estados Unidos';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/USA.png';
+              break;
+            case 'Wales':
+              match.awayTeam.name = 'Gales';
+              match.awayTeam.flag = 'https://play.fifa.com/media/flags/squads/WAL.png';
+              break;
+          }
+          //Fecha y hora formateada
+          match.date = new Date(match.date).toUTCString();
+          partidosB.push(match);
+        })
+      });
+    });
+    var hashB = {};
+    partidosB = partidosB.filter(function (current) {
+      var exists = !hashB[current.id];
+      hashB[current.id] = true;
+      return exists;
+    });
+    partidosB.sort(function (a, b) {
+      return new Date(a.date) - new Date(b.date);
+    });
 
     ////
     if (!DatailsLoaded) {
@@ -782,9 +1119,9 @@ class App extends React.Component {
 
     }
     else {
-      console.clear();
-      console.log(cuartos);
       return (
+        console.clear(),
+        console.log(final),
         <div className="App">
           <header className="App-header">
             <h2>
@@ -796,6 +1133,9 @@ class App extends React.Component {
               </Nav.Item>
               <Nav.Item key="2" eventKey="2" onClick={this.handleClick(2)}>
                 <Nav.Link eventKey="2">Tablas</Nav.Link>
+              </Nav.Item>
+              <Nav.Item key="3" eventKey="3" onClick={this.handleClick(3)}>
+                <Nav.Link eventKey="3">Grupos</Nav.Link>
               </Nav.Item>
             </Nav>
           </header>
@@ -817,7 +1157,10 @@ class App extends React.Component {
                     <Nav.Link id="menu" eventKey="4">Semifinales</Nav.Link>
                   </Nav.Item>
                   <Nav.Item key="5" eventKey="5" onClick={this.handleClick2(5)}>
-                    <Nav.Link id="menu" eventKey="5">Final</Nav.Link>
+                    <Nav.Link id="menu" eventKey="5">Tercer Puesto</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="6" eventKey="6" onClick={this.handleClick2(6)}>
+                    <Nav.Link id="menu" eventKey="6">Final</Nav.Link>
                   </Nav.Item>
                 </Nav>
               </Row>
@@ -835,11 +1178,11 @@ class App extends React.Component {
 
                                 <th width="20%">Local</th>
 
-                                <th width="10%">VS</th>
+                                <th width="12%">VS</th>
 
                                 <th width="20%">Visitante</th>
 
-                                <th width="25%" className="estadio">Estadio</th>
+                                <th width="20%" className="estadio">Estadio</th>
                                 <th width="15%">Fecha</th>
                                 <th width="5%">Estado</th>
                               </tr>
@@ -857,16 +1200,16 @@ class App extends React.Component {
 
                                   <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
 
-                                  <td width="4%" className="gol gol-gh">{item.homeTeam.goals}</td>
+                                  <td width="5%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
                                   <td width="2%" valign="middle"><div className="rombo"></div></td>
-                                  <td witdh="4%" className="gol gol-ga">{item.awayTeam.goals}</td>
+                                  <td witdh="5%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
 
                                   <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
 
                                   <td width="5%" valign="middle">
                                     {item.awayTeam.name === "Suiza" ? <Card.Img variant="suiza" src={item.awayTeam.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={item.awayTeam.flag} />}</td>
 
-                                  <td width="25%">{item.venue}</td>
+                                  <td width="20%">{item.venue}</td>
                                   <td width="15%">{item.date}</td>
                                   <td width="5%" align="center" valign="middle"><div className={item.status}></div></td>
                                 </tr>
@@ -906,13 +1249,13 @@ class App extends React.Component {
                               <thead>
                                 <tr key={item.id}>
                                   <td width="5%"><Card.Img variant="top" src={item.homeTeam.flag} /></td>
-                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals || item.homeTeam.penalties > item.awayTeam.penalties ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
 
-                                  <td width="4%" className="gol gol-gh">{item.homeTeam.goals}</td>
+                                  <td width="4%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
                                   <td width="2%" valign="middle"><div className="rombo"></div></td>
-                                  <td width="4%" className="gol gol-ga">{item.awayTeam.goals}</td>
+                                  <td width="4%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
 
-                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals || item.homeTeam.penalties < item.awayTeam.penalties ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
                                   <td width="5%" valign="middle">
                                     {item.awayTeam.name === "Suiza" ? <Card.Img variant="suiza" src={item.awayTeam.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={item.awayTeam.flag} />}</td>
 
@@ -920,6 +1263,19 @@ class App extends React.Component {
                                   <td width="15%">{item.date}</td>
                                   <td width="5%" align="center" valign="middle"><div className={item.status}></div></td>
                                 </tr>
+                                {item.homeTeam.goals === item.awayTeam.goals && item.homeTeam.goals !== '-' ?
+                                  <tr>
+                                    <td width="5%"></td>
+                                    <td width="15%" valign="middle" align="right"></td>
+                                    <td width="4%" className="gol-gh penales">{item.homeTeam.penalties}</td>
+                                    <td width="2%" valign="middle" className="penales"><div className="rombo"></div></td>
+                                    <td width="4%" className="gol-ga penales">{item.awayTeam.penalties}</td>
+                                    <td width="15%" valign="middle"></td>
+                                    <td width="5%" valign="middle"></td>
+                                    <td width="30%"></td>
+                                    <td width="15%"></td>
+                                    <td width="5%" align="center" valign="middle"></td>
+                                  </tr> : null}
                               </thead>
                             </Table>
                           ))}
@@ -941,35 +1297,49 @@ class App extends React.Component {
                               <tr>
                                 <th width="20%">Local</th>
 
-                                <th width="10%">VS</th>
+                                <th width="12%">VS</th>
 
                                 <th width="20%">Visitante</th>
 
-                                <th width="30%" className="estadio">Estadio</th>
-                                <th width="15%">Fecha</th>
+                                <th width="20%" className="estadio">Estadio</th>
+                                <th width="20%">Fecha</th>
                                 <th width="5%">Estado</th>
                               </tr>
                             </thead>
                           </Table>
                           {cuartos.map(item => (
-                            <Table className="table">
+                            <Table className="table" >
                               <thead>
-                                <tr key={item.id}>
+                                <tr key={item.id} valign="middle">
                                   <td width="5%"><Card.Img variant="top" src={item.homeTeam.flag} /></td>
-                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals || item.homeTeam.penalties > item.awayTeam.penalties ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
 
-                                  <td width="4%" className="gol gol-gh">{item.homeTeam.goals}</td>
+                                  <td width="5%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
                                   <td width="2%" valign="middle"><div className="rombo"></div></td>
-                                  <td width="4%" className="gol gol-ga">{item.awayTeam.goals}</td>
+                                  <td width="5%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
 
-                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals || item.homeTeam.penalties < item.awayTeam.penalties ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
                                   <td width="5%" valign="middle">
                                     {item.awayTeam.name === "Suiza" ? <Card.Img variant="suiza" src={item.awayTeam.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={item.awayTeam.flag} />}</td>
 
-                                  <td width="30%">{item.venue}</td>
-                                  <td width="15%">{item.date}</td>
-                                  <td width="5%" align="center" valign="middle"><div className={item.status}></div></td>
+                                  <td width="20%">{item.venue}</td>
+                                  <td width="20%">{item.date}</td>
+                                  {!isNaN(item.status) ? <td width="5%" align="center" valign="middle"><div className={item.time}></div></td> :
+                                    <td width="5%" align="center" valign="middle"><div className={item.status}></div></td>}
                                 </tr>
+                                {item.homeTeam.goals === item.awayTeam.goals && (item.homeTeam.goals !== '-') ?
+                                  <tr>
+                                    <td width="5%"></td>
+                                    <td width="15%" valign="middle" align="right"></td>
+                                    <td width="5%" className="gol-gh penales">{item.homeTeam.penalties}</td>
+                                    <td width="2%" valign="middle" className="penales"><div className="rombo"></div></td>
+                                    <td width="5%" className="gol-ga penales">{item.awayTeam.penalties}</td>
+                                    <td width="15%" valign="middle"></td>
+                                    <td width="5%" valign="middle"></td>
+                                    <td width="20%"></td>
+                                    <td width="20%"></td>
+                                    <td width="5%" align="center" valign="middle"></td>
+                                  </tr> : null}
                               </thead>
                             </Table>
                           ))}
@@ -991,11 +1361,11 @@ class App extends React.Component {
                               <tr>
                                 <th width="20%">Local</th>
 
-                                <th width="10%">VS</th>
+                                <th width="12%">VS</th>
 
                                 <th width="20%">Visitante</th>
 
-                                <th width="30%" className="estadio">Estadio</th>
+                                <th width="20%">Estadio</th>
                                 <th width="15%">Fecha</th>
                                 <th width="5%">Estado</th>
                               </tr>
@@ -1004,22 +1374,35 @@ class App extends React.Component {
                           {semifinal.map(item => (
                             <Table className="table">
                               <thead>
-                                <tr key={item.id}>
+                                <tr id={item.matchNumber} className="match" valign="middle" target='_blank'>
                                   <td width="5%"><Card.Img variant="top" src={item.homeTeam.flag} /></td>
-                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals || item.homeTeam.penalties > item.awayTeam.penalties ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
 
-                                  <td width="4%" className="gol gol-gh">{item.homeTeam.goals}</td>
+                                  <td width="5%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
                                   <td width="2%" valign="middle"><div className="rombo"></div></td>
-                                  <td width="4%" className="gol gol-ga">{item.awayTeam.goals}</td>
+                                  <td width="5%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
 
-                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals || item.homeTeam.penalties < item.awayTeam.penalties ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
                                   <td width="5%" valign="middle">
                                     {item.awayTeam.name === "Suiza" ? <Card.Img variant="suiza" src={item.awayTeam.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={item.awayTeam.flag} />}</td>
 
-                                  <td width="30%">{item.venue}</td>
+                                  <td width="20%">{item.venue}</td>
                                   <td width="15%">{item.date}</td>
                                   <td width="5%" align="center" valign="middle"><div className={item.status}></div></td>
                                 </tr>
+                                {item.homeTeam.goals === item.awayTeam.goals && item.homeTeam.goals !== '-' ?
+                                  <tr>
+                                    <td width="5%"></td>
+                                    <td width="15%" valign="middle" align="right"></td>
+                                    <td width="4%" className="gol-gh penales">{item.homeTeam.penalties}</td>
+                                    <td width="2%" valign="middle" className="penales"><div className="rombo"></div></td>
+                                    <td width="4%" className="gol-ga penales">{item.awayTeam.penalties}</td>
+                                    <td width="15%" valign="middle"></td>
+                                    <td width="5%" valign="middle"></td>
+                                    <td width="30%"></td>
+                                    <td width="15%"></td>
+                                    <td width="5%" align="center" valign="middle"></td>
+                                  </tr> : null}
                               </thead>
                             </Table>
                           ))}
@@ -1029,9 +1412,63 @@ class App extends React.Component {
                   </Card>
                 </Col>
               </Row>
+              {/*Tercer*/}
+              <Row id="tercer" style={{ display: 'none' }}>
+                <Col>
+                  <Card>
+                    <Card.Body>
+                      <Row>
+                        <Col style={{ textAlign: 'left' }} md={4}>FINALIZADO</Col>
+                        <Col style={{ textAlign: 'right' }} md={{ span: 4, offset: 4 }}>{tercero.date}</Col>
+                      </Row>
 
+                      <Row style={{ display: 'flex', alignItems: 'center' }}>
+                        <Col><Card.Img variant="top2" src={tercero.homeTeam.flag} /></Col>
+                        <Col>{tercero.homeTeam.name}</Col>
+                        <Col><h1>{tercero.homeTeam.goals}</h1></Col>
+                        <Col><h1>-</h1></Col>
+                        <Col><h1>{tercero.awayTeam.goals}</h1></Col>
+                        <Col>{tercero.awayTeam.name}</Col>
+                        <Col><Card.Img variant="top2" src={tercero.awayTeam.flag} /></Col>
+                      </Row>
+                      <Row>
+                        <Col>Estadio: {tercero.venue}</Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
 
+              {/*Final*/}
+              <Row id="final" style={{ display: 'none' }}>
+                <Col>
+                  <Card>
+                    <Card.Body>
+                      <Row>
+                        <Col style={{ textAlign: 'left' }} md={4}>FINALIZADO</Col>
+                        <Col style={{ textAlign: 'right' }} md={{ span: 4, offset: 4 }}>{final64.date}</Col>
+                      </Row>
+
+                      <Row style={{ display: 'flex', alignItems: 'center' }}>
+                        <Col><Card.Img variant="top2" src={final64.homeTeam.flag} /></Col>
+                        <Col>{final64.homeTeam.name}</Col>
+                        <Col><h1>{final64.homeTeam.goals}</h1></Col>
+                          <Col><h3>({final64.homeTeam.penalties})</h3></Col>
+                          <Col><h1>-</h1></Col>
+                          <Col><h3>({final64.awayTeam.penalties})</h3></Col>
+                        <Col><h1>{final64.awayTeam.goals}</h1></Col>
+                        <Col>{final64.awayTeam.name}</Col>
+                        <Col><Card.Img variant="top2" src={final64.awayTeam.flag} /></Col>
+                      </Row>
+                      <Row>
+                        <Col>Estadio: {final64.venue}</Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
             </div>
+            {/*Posiciones*/}
             <div className="container-positions" style={{ display: 'none' }}>
               <Row>
                 <Col>
@@ -1067,7 +1504,7 @@ class App extends React.Component {
                                         <td id="pos">{team.position}</td>
                                         <td width="50px" valign="middle">
                                           {team.alternateName === "Suiza" ? <Card.Img variant="suiza" src={team.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={team.flag} />}</td>
-                                        
+
                                         <td>{team.alternateName}</td>
                                         <td>{team.matches.length}</td>
                                         <td>{team.wins}</td>
@@ -1091,26 +1528,277 @@ class App extends React.Component {
                 </Col>
               </Row>
             </div>
+            {/*Grupos*/}
+            <div className="container-grupos" style={{ display: 'none' }}>
+              <Row>
+                <Nav variant="pills" defaultActiveKey="1">
+                  <Nav.Item key="1" eventKey="1" onClick={this.handleSelect(1)}>
+                    <Nav.Link eventKey="1">Grupo A</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="2" eventKey="2" onClick={this.handleSelect(2)}>
+                    <Nav.Link eventKey="2">Grupo B</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="3" eventKey="3" onClick={this.handleSelect(3)}>
+                    <Nav.Link eventKey="3">Grupo C</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="4" eventKey="4" onClick={this.handleSelect(4)}>
+                    <Nav.Link eventKey="4">Grupo D</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="5" eventKey="5" onClick={this.handleSelect(5)}>
+                    <Nav.Link eventKey="5">Grupo E</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="6" eventKey="6" onClick={this.handleSelect(6)}>
+                    <Nav.Link eventKey="6">Grupo F</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="7" eventKey="7" onClick={this.handleSelect(7)}>
+                    <Nav.Link eventKey="7">Grupo G</Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item key="8" eventKey="8" onClick={this.handleSelect(8)}>
+                    <Nav.Link eventKey="8">Grupo H</Nav.Link>
+                  </Nav.Item>
+                </Nav>
+              </Row>
+              {/*Grupo A */}
+              <Row id="grupoA">
+                <Col>
+                  <Card>
+                    <Card.Body>
+                      <Row>
+                        <Col>
+                          {/*Tabla General*/}
+                          <Row>
+                            <Col>
+                              {grupoA.map(item => (
+                                <Table hover variant="dark">
+                                  <thead>
+                                    <tr>
+                                      <th colSpan="11" className="grupo">Tabla General</th>
+                                    </tr>
+                                    <tr>
+                                      <th width="10px">Pos</th>
+                                      <th width="100px" colSpan="2">Equipo</th>
+                                      <th>PJ</th>
+                                      <th>PG</th>
+                                      <th>PE</th>
+                                      <th>PP</th>
+                                      <th>GF</th>
+                                      <th>GC</th>
+                                      <th>DG</th>
+                                      <th>Pts</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {item.teams.map(team => (
+                                      <tr className={`pos${team.position}`}>
+                                        <td id="pos">{team.position}</td>
+                                        <td width="50px" valign="middle">
+                                          {team.alternateName === "Suiza" ? <Card.Img variant="suiza" src={team.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={team.flag
+                                          } />}</td>
+                                        <td>{team.alternateName}</td>
+                                        <td>{team.matches.length}</td>
+                                        <td>{team.wins}</td>
+                                        <td>{team.draws}</td>
+                                        <td>{team.losses}</td>
+                                        <td>{team.goalsScored}</td>
+                                        <td>{team.goalsConceded}</td>
+                                        <td>{team.goalsDifference}</td>
+                                        <td>{team.points}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </Table>
+                              ))}
+                            </Col>
+                          </Row>
+
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                  <h2>Partidos</h2>
+                  <Card>
+                    <Card.Body>
+                      {/*Partidos Grupo A*/}
+                      <Row>
+                        <Col>
+                          <Table className="table indicacion">
+                            <thead>
+                              <tr>
+                                <th width="20%">Local</th>
+
+                                <th width="10%">VS</th>
+
+                                <th width="20%">Visitante</th>
+
+                                <th width="30%" className="estadio">Estadio</th>
+                                <th width="15%">Fecha</th>
+                              </tr>
+                            </thead>
+                          </Table>
+                          {partidosA.map(item => (
+                            <Table className="table">
+                              <thead>
+                                <tr key={item.id} valign="middle">
+                                  <td width="5%" valign="middle"><Card.Img variant="top" src={item.homeTeam.flag} /></td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
+
+                                  <td width="4%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
+                                  <td width="2%" valign="middle"><div className="rombo"></div></td>
+                                  <td width="4%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
+
+                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
+                                  <td width="5%" valign="middle">
+                                    <Card.Img variant="top" src={item.awayTeam.flag} /></td>
+
+                                  <td width="30%">{item.venue}</td>
+                                  <td width="15%">{moment(item.date).format('DD-MM-YY HH:mm')}</td>
+                                </tr>
+                              </thead>
+                            </Table>
+                          ))}
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+              {/*Grupo B */}
+              <Row id="grupoB" style={{ display: 'none' }}>
+                <Col>
+                  <Card>
+                    <Card.Body>
+                      <Row>
+                        <Col>
+                          {/*Tabla General*/}
+                          <Row>
+                            <Col>
+                              {grupoB.map(item => (
+                                <Table hover variant="dark">
+                                  <thead>
+                                    <tr>
+                                      <th colSpan="11" className="grupo">Tabla General</th>
+                                    </tr>
+                                    <tr>
+                                      <th width="10px">Pos</th>
+                                      <th width="100px" colSpan="2">Equipo</th>
+                                      <th>PJ</th>
+                                      <th>PG</th>
+                                      <th>PE</th>
+                                      <th>PP</th>
+                                      <th>GF</th>
+                                      <th>GC</th>
+                                      <th>DG</th>
+                                      <th>Pts</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {item.teams.map(team => (
+                                      <tr className={`pos${team.position}`}>
+                                        <td id="pos">{team.position}</td>
+                                        <td width="50px" valign="middle">
+                                          {team.alternateName === "Suiza" ? <Card.Img variant="suiza" src={team.flag} height="20%" width="20%" /> : <Card.Img variant="top" src={team.flag} />}</td>
+                                        <td>{team.alternateName}</td>
+                                        <td>{team.matches.length}</td>
+                                        <td>{team.wins}</td>
+                                        <td>{team.draws}</td>
+                                        <td>{team.losses}</td>
+                                        <td>{team.goalsScored}</td>
+                                        <td>{team.goalsConceded}</td>
+                                        <td>{team.goalsDifference}</td>
+                                        <td>{team.points}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </Table>
+                              ))}
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                  <h2>Partidos</h2>
+                  <Card>
+                    <Card.Body>
+                      {/*Partidos Grupo B*/}
+                      <Row>
+                        <Col>
+                          <Table className="table indicacion">
+                            <thead>
+                              <tr>
+                                <th width="20%">Local</th>
+
+                                <th width="10%">VS</th>
+
+                                <th width="20%">Visitante</th>
+
+                                <th width="30%" className="estadio">Estadio</th>
+                                <th width="15%">Fecha</th>
+                              </tr>
+                            </thead>
+                          </Table>
+                          {partidosB.map(item => (
+                            <Table className="table">
+                              <thead>
+                                <tr key={item.id} valign="middle">
+                                  <td width="5%" valign="middle"><Card.Img variant="top" src={item.homeTeam.flag} /></td>
+                                  <td width="15%" valign="middle">{item.homeTeam.goals > item.awayTeam.goals ? <span className="winner">{item.homeTeam.name}</span> : item.homeTeam.name}</td>
+
+                                  <td width="4%" className="gol gol-gh"><div className="circle">{item.homeTeam.goals}</div></td>
+                                  <td width="2%" valign="middle"><div className="rombo"></div></td>
+                                  <td width="4%" className="gol gol-ga"><div className="circle">{item.awayTeam.goals}</div></td>
+
+                                  <td width="15%" valign="middle">{item.homeTeam.goals < item.awayTeam.goals ? <span className="winner">{item.awayTeam.name}</span> : item.awayTeam.name}</td>
+                                  <td width="5%" valign="middle">
+                                    <Card.Img variant="top" src={item.awayTeam.flag} /></td>
+
+                                  <td width="30%">{item.venue}</td>
+                                  <td width="15%">{moment(item.date).format('DD-MM-YY HH:mm')}</td>
+                                </tr>
+                              </thead>
+                            </Table>
+                          ))}
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
           </div>
+          <footer id="footer">
+            <p>World Cup 2022</p>
+            <p>Información proporcionada desde <a href="https://github.com/liverday/world-cup-api">Api World Cup 2022 </a></p>
+          </footer>
         </div>
       );
     }
   }
   handleClick(i) {
-    if (i == 1) {
-      return function () {
-        document.querySelector('.container-matches').style.display = 'block';
-        document.querySelector('.container-positions').style.display = 'none';
-      }
-    }
-    else {
-      return function () {
-        document.querySelector('.container-matches').style.display = 'none';
-        document.querySelector('.container-positions').style.display = 'block';
-      }
+    // eslint-disable-next-line default-case
+    switch (i) {
+      case 1:
+        return function () {
+          document.querySelector('.container-matches').style.display = 'block';
+          document.querySelector('.container-positions').style.display = 'none';
+          document.querySelector('.container-grupos').style.display = 'none';
+        }
+      case 2:
+        return function () {
+          document.querySelector('.container-matches').style.display = 'none';
+          document.querySelector('.container-positions').style.display = 'block';
+          document.querySelector('.container-grupos').style.display = 'none';
+        }
+      case 3:
+        return function () {
+          document.querySelector('.container-matches').style.display = 'none';
+          document.querySelector('.container-positions').style.display = 'none';
+          document.querySelector('.container-grupos').style.display = 'block';
+        }
     }
   }
   handleClick2(i) {
+    // eslint-disable-next-line default-case
     switch (i) {
       case 1:
         return function () {
@@ -1126,6 +1814,7 @@ class App extends React.Component {
           document.querySelector('#octavos').style.display = 'block';
           document.querySelector('#cuartos').style.display = 'none';
           document.querySelector('#semis').style.display = 'none';
+          document.querySelector('#tercer').style.display = 'none';
           document.querySelector('#final').style.display = 'none';
         }
       case 3:
@@ -1134,6 +1823,7 @@ class App extends React.Component {
           document.querySelector('#octavos').style.display = 'none';
           document.querySelector('#cuartos').style.display = 'block';
           document.querySelector('#semis').style.display = 'none';
+          document.querySelector('#tercer').style.display = 'none';
           document.querySelector('#final').style.display = 'none';
         }
       case 4:
@@ -1142,6 +1832,7 @@ class App extends React.Component {
           document.querySelector('#octavos').style.display = 'none';
           document.querySelector('#cuartos').style.display = 'none';
           document.querySelector('#semis').style.display = 'block';
+          document.querySelector('#tercer').style.display = 'none';
           document.querySelector('#final').style.display = 'none';
         }
       case 5:
@@ -1150,9 +1841,112 @@ class App extends React.Component {
           document.querySelector('#octavos').style.display = 'none';
           document.querySelector('#cuartos').style.display = 'none';
           document.querySelector('#semis').style.display = 'none';
+          document.querySelector('#tercer').style.display = 'block';
+          document.querySelector('#final').style.display = 'none';
+        }
+      case 6:
+        return function () {
+          document.querySelector('#grupos').style.display = 'none';
+          document.querySelector('#octavos').style.display = 'none';
+          document.querySelector('#cuartos').style.display = 'none';
+          document.querySelector('#semis').style.display = 'none';
+          document.querySelector('#tercer').style.display = 'none';
           document.querySelector('#final').style.display = 'block';
         }
 
+    }
+  }
+  handleSelect(i) {
+    // eslint-disable-next-line default-case
+    switch (i) {
+      case 1:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'block';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 2:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'block';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 3:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'block';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 4:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'block';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 5:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'block';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 6:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'block';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 7:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'block';
+          document.querySelector('#H').style.display = 'none';
+        }
+      case 8:
+        return function () {
+          document.querySelector('#grupoA').style.display = 'none';
+          document.querySelector('#grupoB').style.display = 'none';
+          document.querySelector('#C').style.display = 'none';
+          document.querySelector('#D').style.display = 'none';
+          document.querySelector('#E').style.display = 'none';
+          document.querySelector('#F').style.display = 'none';
+          document.querySelector('#G').style.display = 'none';
+          document.querySelector('#H').style.display = 'block';
+        }
     }
   }
 }

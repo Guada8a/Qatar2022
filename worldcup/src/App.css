@@ -56,7 +56,7 @@ body {
   font-family: "Open Sans" !important;
 }
 table {
-  width: 100%;
+  width: 110%;
   border: 1px solid white !important;
   border-collapse: collapse;
   margin-bottom: 10px;
@@ -108,6 +108,15 @@ table > thead > tr > td {
   margin-top: 7%;
   width: 80%;
   height: 80%;
+  border: none;
+  border-radius: 3px;
+  aspect-ratio: auto 1/1;
+  object-fit: cover;
+}
+.card-img-top2{
+  margin-top: 7%;
+  width: 100%;
+  height: 100%;
   border: none;
   border-radius: 3px;
   aspect-ratio: auto 1/1;
@@ -213,9 +222,52 @@ Table.indicacion {
   -o-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+.circle{
+  width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	background: #d82f16;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+  margin:0px auto;
+  padding:3%;
+  color: #ebdacd;
+}
 .App1-child{
   position:fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.penales{
+  background-color: #2a2a2a !important;
+  color: #fff;
+}
+.grupo-pills{
+  color: #2a2a2a !important;
+}
+.grupo-pills.active{
+  color: #d82f16 !important;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
